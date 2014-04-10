@@ -1,68 +1,57 @@
-var fs = require('fs');
-var Promise = require('node-promise/promise');
-var readFile_promise = Promise.convertNodeAsyncFunction(fs.readFile);
-
+'use strict';
 module.exports = function (grunt) {
-	var codestyle = {
-		options : {
-			indentSize : 1,
-			indentChar : "\t"
-		}
-	};
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    meta: {
+      banner: '/*\n *  <%= pkg.name %> v<%= pkg.version %>\n' +
+        '<%= pkg.homepage ? " *  " + pkg.homepage + "\\n" : "" %>' +
+        ' *  \n' +
+        ' *  Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */'
+    },
+    concat: {
+      dist: {
+        src: [
+          'bower_components/es6-module-loader/dist/es6-module-loader.js',
+          'bower_components/systemjs/dist/system.js',
+          'src/start.js',
+          'src/core.js',
+          'src/config.js',
+          'src/startup.js',
+          'src/end.js',
+          'src/system-format-steal.js'
+          
+        ],
+        dest: 'dist/<%= pkg.name %>.js'
+      }
+    },
+    uglify: {
+      options: {
+        banner: '<%= meta.banner %>\n',
+        compress: {
+          drop_console: true
+        }
+      },
+      dist: {
+        options: {
+          banner: '<%= meta.banner %>\n'
+          + '/*\n *  ES6 Promises shim from when.js, Copyright (c) 2010-2014 Brian Cavalier, John Hann, MIT License\n */\n'
+        },
+        src: 'dist/<%= pkg.name %>.js',
+        dest: 'dist/<%= pkg.name %>.production.js'
+      }
+    },
+	watch: {
+		files: [ "src/*.js"],
+		tasks: "default"
+	}
+  });
 
-	grunt.registerTask("build", function() {
-		var done = this.async();
-		fs.readFile(grunt.config('build').file, 'utf8', function (err, core) {
-			var promises = [];
-			if (err) {
-				return console.log('An error occured while reading core/core.js file')
-			}
+  grunt.loadNpmTasks( "grunt-contrib-watch" );
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-			var matches = core.match(/\/\*#\s+(.*?)\s+#\*\//g);
-			matches.forEach(function (file) {
-				promises.push(readFile_promise("core/" + file.slice(3, -3).trim()));
-			});
-
-			Promise.all(promises).then(function (results) {
-				var out = grunt.config('build').out;
-				for (var i = 0; i < results.length; i++) {
-					core = core.replace(matches[i], results[i]);
-					console.log("-- Adding core/" + matches[i].slice(3, -3).trim())
-				}
-				fs.writeFile(out, core, function (err) {
-					if (err) {
-						return console.log('There was an error with writing ' + out)
-					}
-					console.log(out + ' was successfully built.')
-					done();
-				})
-			})
-		});
-	});
-
-	grunt.initConfig({
-		pkg : '<json:package.json>',
-		meta : {
-			banner : '/*! <%= pkg.title || pkg.name %> - <%= pkg.version %> - ' +
-				'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-				'<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
-		},
-		out : 'steal.js',
-		build : {
-			file : 'core/core.js',
-			out : '<%= out %>'
-		},
-		uglify: {
-			steal: {
-				files: {
-					'steal.production.js': ['steal.js']
-				}
-			}
-		}
-	});
-
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.registerTask('default', ['build', 'uglify']);
+  grunt.registerTask('lint', ['jshint']);
+  grunt.registerTask('default', [/*'jshint', */'concat', 'uglify']);
 };

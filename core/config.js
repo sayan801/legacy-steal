@@ -13,9 +13,10 @@
 st.getScriptOptions = function (script) {
 
 	var options = {},
-		parts, src, query, startFile, env;
+		parts, src, query, startFile, env,
+		scripts = document.getElementsByTagName("script");
 
-	script = script || h.getStealScriptSrc();
+	script = scripts[scripts.length-1];
 
 	if (script) {
 
@@ -61,7 +62,7 @@ st.getScriptOptions = function (script) {
 			parts.pop();
 		}
 		var root = parts.join("/");
-		options.root = root
+		options.root = root;
 
 	}
 

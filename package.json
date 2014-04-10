@@ -1,23 +1,23 @@
 {
-  "name" : "StealJS",
+  "name" : "steal",
   "description" : "Gets JavaScript.",
-  "version" : "3.3.0pre",
+  "version" : "0.1.0",
   "author" : {
     "name" : "Bitovi",
     "email" : "contact@bitovi.com",
     "web" : "http://bitovi.com/"
   },
   "devDependencies" : {
-    "grunt" : "0.4.1",
-    "grunt-closure-tools" : "> 0.6.2",
-    "grunt-contrib-uglify": "0.2.1",
-    "node-promise" : ">= 0.5.4",
-    "grunt-contrib-connect": "0.1.2"
+  	"bower": "1.2.8",
+    "es6-module-loader": "~0.5.4",
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-watch": "~0.3.0"
   },
-  "homepage" : "http://javascriptmvc.com/docs.html#!stealjs",
-  "repository" : {
-    "type" : "git",
-    "url" : "git://github.com/jupiterjs/steal.git"
+  "scripts": {
+    "install": "node node_modules/bower/bin/bower install"
   },
   "licenses" : [
     {
