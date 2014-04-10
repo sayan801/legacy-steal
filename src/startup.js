@@ -96,7 +96,6 @@
 				return steal("steal/dev");
 				
 			}).then(function(){
-				console.log("getting", options.startId)
 				return steal.apply(null, [options.startId]);
 			}).then(function(){
 				console.log("success")

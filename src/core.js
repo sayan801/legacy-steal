@@ -69,7 +69,6 @@
 		var imports = [];
 		var factory;
 		each(arguments, function(arg){
-			console.log("global steal", normalize(arg))
 			if(isString(arg)) {
 				imports.push( System['import']( normalize(arg) ) );
 			} else if(typeof arg === "function") {
