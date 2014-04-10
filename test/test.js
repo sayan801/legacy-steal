@@ -100,5 +100,16 @@ module("steal via system import");
 		
 	});
 	
-
+	asyncTest("default bower_components config path", function(){
+		writeIframe(makeStealHTML(
+			"basics/basics.html",
+			'src="../bower_components/steal/steal.js?basics"'));
+	});
+	
+	
+	asyncTest("default bower_components without config still works", function(){
+		makeIframe("basics/noconfig.html");
+	});
+	
+	
 })();

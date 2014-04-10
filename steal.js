@@ -3223,6 +3223,9 @@ global.upgradeSystemLoader = function() {
 			var lastSlash = uri.lastIndexOf("/"),
 				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
 			return matches ? matches[0] : "";
+		},
+		last = function(arr){
+			return arr[arr.length - 1];
 		};
 		
 	var configDeferred,
@@ -3374,8 +3377,15 @@ configSpecial.configUrl = configSpecial.configPath;
 			// Split on / to get rootUrl
 			parts = src.split("/");
 			parts.pop();
-			if (parts[parts.length - 1] == "steal") {
+			if ( last(parts) === "steal" ) {
 				parts.pop();
+				if ( last(parts) === "bower_components" ) {
+					parts.pop();
+					options.paths= {
+						"steal/*" : "bower_components/steal/*.js",
+						"@traceur": "bower_components/traceur/traceur.js"
+					};
+				}
 			}
 			var root = parts.join("/");
 			options.root = root+"/";
@@ -3431,6 +3441,9 @@ configSpecial.configUrl = configSpecial.configPath;
 			
 			devDeferred = configDeferred.then(function(){
 				return steal("steal/dev");
+			},function(){
+				console.log("steal - error loading stealconfig.");
+				return steal("steal/dev");
 			});
 			
 			appDeferred = devDeferred.then(function(){
@@ -3438,7 +3451,7 @@ configSpecial.configUrl = configSpecial.configPath;
 			}).then(function(){
 				steal.dev.log("app loaded successfully")
 			}, function(error){
-				steal.dev.log("error",error,  error.stack)
+				console.log("error",error,  error.stack);
 			});
 			
 		}

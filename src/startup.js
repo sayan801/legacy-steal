@@ -38,8 +38,15 @@
 			// Split on / to get rootUrl
 			parts = src.split("/");
 			parts.pop();
-			if (parts[parts.length - 1] == "steal") {
+			if ( last(parts) === "steal" ) {
 				parts.pop();
+				if ( last(parts) === "bower_components" ) {
+					parts.pop();
+					options.paths= {
+						"steal/*" : "bower_components/steal/*.js",
+						"@traceur": "bower_components/traceur/traceur.js"
+					};
+				}
 			}
 			var root = parts.join("/");
 			options.root = root+"/";
@@ -95,6 +102,9 @@
 			
 			devDeferred = configDeferred.then(function(){
 				return steal("steal/dev");
+			},function(){
+				console.log("steal - error loading stealconfig.");
+				return steal("steal/dev");
 			});
 			
 			appDeferred = devDeferred.then(function(){
@@ -102,7 +112,7 @@
 			}).then(function(){
 				steal.dev.log("app loaded successfully")
 			}, function(error){
-				steal.dev.log("error",error,  error.stack)
+				console.log("error",error,  error.stack);
 			});
 			
 		}

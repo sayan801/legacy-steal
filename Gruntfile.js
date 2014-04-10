@@ -43,10 +43,11 @@ module.exports = function (grunt) {
     },
     copy: {
 		toTest: {
-			files: [{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/', filter: 'isFile'}]
-		},
-		toStealTest: {
-			files: [{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/steal/', filter: 'isFile'}]
+			files: [{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/', filter: 'isFile'},
+					{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/steal/', filter: 'isFile'},
+					{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/bower_components/steal/', filter: 'isFile'},
+					{expand: true, cwd: 'bower_components/traceur/', src: ['*'], dest: 'test/bower_components/traceur/', filter: 'isFile'},
+					{expand: true, cwd: 'dev/', src: ['**'], dest: 'test/bower_components/steal/dev/', filter: 'isFile'}]
 		}
     },
 	watch: {
@@ -61,5 +62,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('default', [/*'jshint', */'concat', 'uglify','copy:toTest','copy:toStealTest']);
+  grunt.registerTask('default', [/*'jshint', */'concat', 'uglify','copy:toTest']);
 };

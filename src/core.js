@@ -63,6 +63,9 @@
 			var lastSlash = uri.lastIndexOf("/"),
 				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
 			return matches ? matches[0] : "";
+		},
+		last = function(arr){
+			return arr[arr.length - 1];
 		};
 		
 	var configDeferred,
