@@ -22,7 +22,7 @@ module.exports = function (grunt) {
           'src/system-format-steal.js'
           
         ],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: '<%= pkg.name %>.js'
       }
     },
     uglify: {
@@ -37,9 +37,17 @@ module.exports = function (grunt) {
           banner: '<%= meta.banner %>\n'
           + '/*\n *  ES6 Promises shim from when.js, Copyright (c) 2010-2014 Brian Cavalier, John Hann, MIT License\n */\n'
         },
-        src: 'dist/<%= pkg.name %>.js',
-        dest: 'dist/<%= pkg.name %>.production.js'
+        src: '<%= pkg.name %>.js',
+        dest: '<%= pkg.name %>.production.js'
       }
+    },
+    copy: {
+		toTest: {
+			files: [{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/', filter: 'isFile'}]
+		},
+		toStealTest: {
+			files: [{expand: true, src: ['<%= pkg.name %>.js','<%= pkg.name %>.production.js'], dest: 'test/steal/', filter: 'isFile'}]
+		}
     },
 	watch: {
 		files: [ "src/*.js"],
@@ -51,7 +59,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('default', [/*'jshint', */'concat', 'uglify']);
+  grunt.registerTask('default', [/*'jshint', */'concat', 'uglify','copy:toTest','copy:toStealTest']);
 };

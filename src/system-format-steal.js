@@ -63,7 +63,8 @@
 
       var deps = [];
       var meta = load.metadata;
-
+      var oldSteal = global.steal;
+	
       global.steal = function(){
           for( var i = 0; i < arguments.length; i++ ) {
           if (typeof arguments[i] == 'string') {
@@ -75,7 +76,7 @@
       };
 
       System.__exec(load);
-
+      global.steal = oldSteal;
       // deps not defined for an AMD module that defines a different name
       deps = deps || [];
 

@@ -3,7 +3,7 @@
 	var camelize = function(str){
 		return str.replace(/-+(.)?/g, function(match, chr){ 
 			return chr ? chr.toUpperCase() : '' 
-		}) 
+		});
 	},
 		each = function( o, cb){
 			var i, len;
@@ -64,25 +64,35 @@
 				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
 			return matches ? matches[0] : "";
 		};
-	
+		
+	var configDeferred,
+		devDeferred,
+		appDeferred;
+		
 	global.steal = function(){
-		var imports = [];
-		var factory;
-		each(arguments, function(arg){
-			if(isString(arg)) {
-				imports.push( System['import']( normalize(arg) ) );
-			} else if(typeof arg === "function") {
-				factory = arg;
+		var args = arguments;
+		var afterConfig = function(){
+			var imports = [];
+			var factory;
+			each(args, function(arg){
+				if(isString(arg)) {
+					imports.push( System['import']( normalize(arg) ) );
+				} else if(typeof arg === "function") {
+					factory = arg;
+				}
+			});
+			
+			var modules = Promise.all(imports);
+			if(factory) {
+				return modules.then(function(modules) {
+			        return factory && factory.apply(null, modules);
+			   });
+			} else {
+				return modules;
 			}
-		});
-		var modules = Promise.all(imports);
-		if(factory) {
-			return modules.then(function(modules) {
-		        return factory && factory.apply(null, modules);
-		    })
-		} else  {
-			return modules;
-		}
+		};
+		// wait until the config has loaded
+		return configDeferred.then(afterConfig,afterConfig);
 	};
 	
 	

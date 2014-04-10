@@ -1,6 +1,6 @@
 {
   "name": "stealjs",
-  "ignore": ["test","src"],
+  "ignore": ["test","src","core"],
   "version": "0.1.0",
   "devDependencies": {
     "qunit": "~1.12.0",

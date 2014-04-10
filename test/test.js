@@ -79,9 +79,26 @@ module("steal via system import");
 	asyncTest("basics with generated html", function(){
 		writeIframe(makeStealHTML(
 			"basics/basics.html",
-			'src="../../dist/steal.js?basics" data-config-path="../config.js"'));
-	})
+			'src="../../steal.js?basics" data-config-path="../config.js"'));
+	});
 	
+	asyncTest("default config path", function(){
+		writeIframe(makeStealHTML(
+			"basics/basics.html",
+			'src="../steal.js?basics"'));
+	});
+
+	asyncTest("default config path", function(){
+		writeIframe(makeStealHTML(
+			"basics/basics.html",
+			'src="../steal/steal.js?basics"'));
+	});
+	
+	
+	asyncTest("inline", function(){
+		makeIframe("basics/inline_basics.html");
+		
+	});
 	
 
 })();

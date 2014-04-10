@@ -42,10 +42,10 @@
 				parts.pop();
 			}
 			var root = parts.join("/");
-			options.root = root;
+			options.root = root+"/";
 			each(script.attributes, function(attr){
 				var optionName = 
-					camelize( attr.nodeName.indexOf("data-") == 0 ?
+					camelize( attr.nodeName.indexOf("data-") === 0 ?
 						 attr.nodeName.replace("data-","") :
 						 attr.nodeName );
 						 
@@ -91,16 +91,18 @@
 			});
 		} else if(options.env == "development"){
 			
-			var final = System.import("stealconfig").then(function(){
-				
+			configDeferred = System.import("stealconfig");
+			
+			devDeferred = configDeferred.then(function(){
 				return steal("steal/dev");
-				
-			}).then(function(){
+			});
+			
+			appDeferred = devDeferred.then(function(){
 				return steal.apply(null, [options.startId]);
 			}).then(function(){
-				console.log("success")
+				steal.dev.log("app loaded successfully")
 			}, function(error){
-				console.log("error",error,  error.stack)
+				steal.dev.log("error",error,  error.stack)
 			});
 			
 		}
