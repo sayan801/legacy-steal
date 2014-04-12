@@ -3291,19 +3291,23 @@ global.upgradeSystemLoader = function() {
 		last = function(arr){
 			return arr[arr.length - 1];
 		};
-		
+
+
+var makeSteal = function(System){ 
+
+
 	var configDeferred,
 		devDeferred,
 		appDeferred;
 		
-	steal = function(){
+	var steal = function(){
 		var args = arguments;
 		var afterConfig = function(){
 			var imports = [];
 			var factory;
 			each(args, function(arg){
 				if(isString(arg)) {
-					imports.push( System['import']( normalize(arg) ) );
+					imports.push( steal.System['import']( normalize(arg) ) );
 				} else if(typeof arg === "function") {
 					factory = arg;
 				}
@@ -3321,7 +3325,7 @@ global.upgradeSystemLoader = function() {
 		// wait until the config has loaded
 		return configDeferred.then(afterConfig,afterConfig);
 	};
-	
+	steal.System = System;
 
 	var configData = {
 		env: "development"
@@ -3459,7 +3463,7 @@ configSpecial.configUrl = configSpecial.configPath;
 		return options;
 	};
 	
-	var startup = function(){
+	steal.startup = function(){
 		
 		// get options from 
 		var urlOptions = getScriptOptions();
@@ -3493,7 +3497,7 @@ configSpecial.configUrl = configSpecial.configPath;
 			});
 		} else if(options.env == "development"){
 			
-			configDeferred = System.import("stealconfig");
+			configDeferred = steal.System.import("stealconfig");
 			
 			devDeferred = configDeferred.then(function(){
 				return steal("steal/dev");
@@ -3514,13 +3518,19 @@ configSpecial.configUrl = configSpecial.configPath;
 	};
 
 	
+	
+	return steal;	
+}
+	
 	if (typeof window != 'undefined') {
-		window.steal = steal;
-		startup();
+		window.steal = makeSteal(System);
+		window.steal.startup();
     }
     else {
+    	var steal = makeSteal(System);
 		steal.System = System;
 		steal.dev = require("./dev/dev.js");
+		steal.clone = makeSteal;
 		module.exports = steal;
     }
 

@@ -64,7 +64,7 @@
 		return options;
 	};
 	
-	var startup = function(){
+	steal.startup = function(){
 		
 		// get options from 
 		var urlOptions = getScriptOptions();
@@ -98,7 +98,7 @@
 			});
 		} else if(options.env == "development"){
 			
-			configDeferred = System.import("stealconfig");
+			configDeferred = steal.System.import("stealconfig");
 			
 			devDeferred = configDeferred.then(function(){
 				return steal("steal/dev");

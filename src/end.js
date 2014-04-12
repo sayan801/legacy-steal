@@ -1,11 +1,17 @@
 	
+	
+	return steal;	
+}
+	
 	if (typeof window != 'undefined') {
-		window.steal = steal;
-		startup();
+		window.steal = makeSteal(System);
+		window.steal.startup();
     }
     else {
+    	var steal = makeSteal(System);
 		steal.System = System;
 		steal.dev = require("./dev/dev.js");
+		steal.clone = makeSteal;
 		module.exports = steal;
     }
 
