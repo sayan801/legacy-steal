@@ -98,15 +98,3 @@
 		return configDeferred.then(afterConfig,afterConfig);
 	};
 	
-	
-	
-	
-
-
-
-	
-
-
-
-
-
