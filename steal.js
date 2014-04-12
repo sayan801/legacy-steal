@@ -1299,7 +1299,7 @@ global.upgradeSystemLoader = function() {
 
 })(typeof window != 'undefined' ? window : global);
 
-(function(global){
+(function(){
 
 	// helpers
 	var camelize = function(str){
@@ -1374,7 +1374,7 @@ global.upgradeSystemLoader = function() {
 		devDeferred,
 		appDeferred;
 		
-	global.steal = function(){
+	steal = function(){
 		var args = arguments;
 		var afterConfig = function(){
 			var imports = [];
@@ -1401,44 +1401,44 @@ global.upgradeSystemLoader = function() {
 	};
 	
 
-var configData = {
-	env: "development"
-};
-
-steal.config = function(data, value){
-	if(isString(data)) {
-		if(arguments.length >= 2) {
+	var configData = {
+		env: "development"
+	};
+	
+	steal.config = function(data, value){
+		if(isString(data)) {
+			if(arguments.length >= 2) {
+				
+			} else {
+				
+			}
+		} else if(typeof data === "object") {
+			each(configSpecial, function(special, name){
+				if(special.set && data[name]){
+					var res = special.set(data[name]);
+					if(res !== undefined) {
+						data[name] = res;
+					} else {
+						delete data[name];
+					}
+				}
+			});
+			
+			extend(configData, data);
 			
 		} else {
-			
-		}
-	} else if(typeof data === "object") {
-		each(configSpecial, function(special, name){
-			if(special.set && data[name]){
-				var res = special.set(data[name]);
-				if(res !== undefined) {
-					data[name] = res;
-				} else {
-					delete data[name];
+			var config = {};
+			each(configSpecial, function(special, name){
+				if(special.get){
+					config[name] = special.get();
 				}
-			}
-		});
+			});
+			return extend(config, configData);	
+		}
+		// handle System special configs
 		
-		extend(configData, data);
 		
-	} else {
-		var config = {};
-		each(configSpecial, function(special, name){
-			if(special.get){
-				config[name] = special.get();
-			}
-		});
-		return extend(config, configData);	
-	}
-	// handle System special configs
-	
-	
-};
+	};
 
 var configSpecial = {
 	root: {
@@ -1591,10 +1591,18 @@ configSpecial.configUrl = configSpecial.configPath;
 		}
 	};
 
-	startup();
 
+	if (typeof window != 'undefined') {
+		window.steal = steal;
+		startup();
+    }
+    else {
+		steal.System = System;
+		steal.dev = require("./dev/dev.js");
+		module.exports = steal;
+    }
 
-})(typeof window != "undefined" ? window : this);
+})();
 /*
   SystemJS AMD Format
   Provides the AMD module format definition at System.format.amd

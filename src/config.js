@@ -1,42 +1,42 @@
 
-var configData = {
-	env: "development"
-};
-
-steal.config = function(data, value){
-	if(isString(data)) {
-		if(arguments.length >= 2) {
+	var configData = {
+		env: "development"
+	};
+	
+	steal.config = function(data, value){
+		if(isString(data)) {
+			if(arguments.length >= 2) {
+				
+			} else {
+				
+			}
+		} else if(typeof data === "object") {
+			each(configSpecial, function(special, name){
+				if(special.set && data[name]){
+					var res = special.set(data[name]);
+					if(res !== undefined) {
+						data[name] = res;
+					} else {
+						delete data[name];
+					}
+				}
+			});
+			
+			extend(configData, data);
 			
 		} else {
-			
-		}
-	} else if(typeof data === "object") {
-		each(configSpecial, function(special, name){
-			if(special.set && data[name]){
-				var res = special.set(data[name]);
-				if(res !== undefined) {
-					data[name] = res;
-				} else {
-					delete data[name];
+			var config = {};
+			each(configSpecial, function(special, name){
+				if(special.get){
+					config[name] = special.get();
 				}
-			}
-		});
+			});
+			return extend(config, configData);	
+		}
+		// handle System special configs
 		
-		extend(configData, data);
 		
-	} else {
-		var config = {};
-		each(configSpecial, function(special, name){
-			if(special.get){
-				config[name] = special.get();
-			}
-		});
-		return extend(config, configData);	
-	}
-	// handle System special configs
-	
-	
-};
+	};
 
 var configSpecial = {
 	root: {

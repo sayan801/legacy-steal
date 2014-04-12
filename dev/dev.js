@@ -14,7 +14,8 @@
  *     steal.dev.warn("Something bad is happening");
  * 
  */
-steal.dev = {
+(function(){
+var dev = {
 	regexps: {
 		colons: /::/,
 		words: /([A-Z]+)([A-Z][a-z])/g,
@@ -104,3 +105,9 @@ steal.dev = {
 		}
 	} 
 };
+	if(steal) {
+		steal.dev= dev;
+	} else {
+		module.exports = dev;
+	}
+})();

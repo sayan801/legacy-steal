@@ -72,7 +72,7 @@
 		devDeferred,
 		appDeferred;
 		
-	global.steal = function(){
+	steal = function(){
 		var args = arguments;
 		var afterConfig = function(){
 			var imports = [];
