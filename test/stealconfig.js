@@ -5,6 +5,9 @@ if(window.noConfig !== true)  {
 			"steal/dev/*" : "../dev/*.js",
 			"@traceur": "../bower_components/traceur/traceur.js",
 			"pathed/pathed": "basics/pathed.js"
+		},
+		map: {
+			"mapd/mapd": "map/mapped"
 		}
 	});
 

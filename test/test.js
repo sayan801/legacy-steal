@@ -111,5 +111,7 @@ module("steal via system import");
 		makeIframe("basics/noconfig.html");
 	});
 	
-	
+	asyncTest("map works", function(){
+		makeIframe("map/map.html");
+	});
 })();

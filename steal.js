@@ -1460,6 +1460,11 @@ var configSpecial = {
 		set: function(val){
 			extend(System.paths,val);
 		}
+	},
+	map: {
+		set: function(val){
+			extend(System.map,val);
+		}
 	}
 };
 
