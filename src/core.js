@@ -1,5 +1,3 @@
-
-
 	var configDeferred,
 		devDeferred,
 		appDeferred;
