@@ -1,7 +1,7 @@
 	var configDeferred,
 		devDeferred,
 		appDeferred;
-		
+
 	var steal = function(){
 		var args = arguments;
 		var afterConfig = function(){

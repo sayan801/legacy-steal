@@ -1,4 +1,4 @@
-if(window.noConfig !== true)  {
+if(typeof window === "undefined" || window.noConfig !== true)  {
 
 	steal.config({
 		paths: {

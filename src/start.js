@@ -1,4 +1,4 @@
-(function(){
+(function(global){
 
 	// helpers
 	var camelize = function(str){
@@ -68,6 +68,5 @@
 		last = function(arr){
 			return arr[arr.length - 1];
 		};
-
 
 var makeSteal = function(System){ 

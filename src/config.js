@@ -26,6 +26,7 @@
 			
 		} else {
 			var config = {};
+			
 			each(configSpecial, function(special, name){
 				if(special.get){
 					config[name] = special.get();
@@ -33,9 +34,6 @@
 			});
 			return extend(config, configData);	
 		}
-		// handle System special configs
-		
-		
 	};
 
 var configSpecial = {

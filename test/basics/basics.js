@@ -1,6 +1,6 @@
 steal('basics/module', function(module){
 	
-	if(window.QUnit) {
+	if(typeof window !== "undefined" && window.QUnit) {
 		QUnit.ok(module, "got basics/module");
 		QUnit.equal(module.name, "module", "module name is right");
 		

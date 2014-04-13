@@ -105,7 +105,7 @@ var dev = {
 		}
 	} 
 };
-	if(steal) {
+	if(typeof steal !== "undefined") {
 		steal.dev= dev;
 	} else {
 		module.exports = dev;

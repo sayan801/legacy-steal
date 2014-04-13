@@ -67,7 +67,10 @@
 	steal.startup = function(){
 		
 		// get options from 
-		var urlOptions = getScriptOptions();
+		if(global.document) {
+			var urlOptions = getScriptOptions();
+		}
+		
 	
 		// B: DO THINGS WITH OPTIONS
 		// CALCULATE CURRENT LOCATION OF THINGS ...
