@@ -114,4 +114,13 @@ module("steal via system import");
 	asyncTest("map works", function(){
 		makeIframe("map/map.html");
 	});
+	
+	
+	asyncTest("read config", function(){
+		writeIframe(makeStealHTML(
+			"basics/basics.html",
+			'src="../../steal.js?configed" data-config-path="../config.js"'));
+	});
+	
+	
 })();

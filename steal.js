@@ -3378,10 +3378,17 @@ var makeSteal = function(System){
 	
 	steal.config = function(data, value){
 		if(isString(data)) {
+			var name = data;
 			if(arguments.length >= 2) {
 				
 			} else {
 				
+				var special = configSpecial[name];
+				if(special && special.get) {
+					return special.get();
+				} else {
+					return configData[name];
+				}
 			}
 		} else if(typeof data === "object") {
 			each(configSpecial, function(special, name){
