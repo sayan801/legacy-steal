@@ -113,7 +113,9 @@
 			appDeferred = devDeferred.then(function(){
 				return steal.apply(null, [options.startId]);
 			}).then(function(){
-				steal.dev.log("app loaded successfully")
+				if(steal.dev) {
+					steal.dev.log("app loaded successfully")
+				}
 			}, function(error){
 				console.log("error",error,  error.stack);
 			});
