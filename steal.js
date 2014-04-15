@@ -3559,7 +3559,7 @@ configSpecial.configUrl = configSpecial.configPath;
 			}, function(error){
 				console.log("error",error,  error.stack);
 			});
-			
+			return appDeferred;
 		}
 	};
 
