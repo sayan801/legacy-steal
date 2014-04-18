@@ -1,3 +1,6 @@
+	
+
+	
 	var getScriptOptions = function () {
 	
 		var options = {},
@@ -37,12 +40,17 @@
 	
 			// Split on / to get rootUrl
 			parts = src.split("/");
-			parts.pop();
+			var lastPart = parts.pop();
+			
+			if(lastPart.indexOf("steal") === 0 && !System.paths["steal/dev/dev"]) {
+				System.paths["steal/dev/dev"] = parts.join("/")+"/dev/dev.js"
+			}
+			
 			if ( last(parts) === "steal" ) {
 				parts.pop();
 				if ( last(parts) === "bower_components" ) {
 					parts.pop();
-					options.paths= {
+					options.paths = {
 						"steal/*" : "bower_components/steal/*.js",
 						"@traceur": "bower_components/traceur/traceur.js"
 					};
@@ -64,11 +72,20 @@
 		return options;
 	};
 	
+	var getOptionsFromStealLocation = function(){
+		if(typeof __dirname === "string" && !System.paths["steal/dev/dev"]) {
+			__dirname+"/dev/dev.js"
+		}
+		return {};
+	};
+	
 	steal.startup = function(){
 		
-		// get options from 
+		// get options from the script tag
 		if(global.document) {
 			var urlOptions = getScriptOptions();
+		} else {
+			var urlOptions = getOptionsFromStealLocation();
 		}
 		
 	
