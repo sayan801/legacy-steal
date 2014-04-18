@@ -22,10 +22,10 @@
 				if(special.set && data[name]){
 					var res = special.set(data[name]);
 					if(res !== undefined) {
-						data[name] = res;
-					} else {
-						delete data[name];
-					}
+						configData[name] = res;
+					} 
+					delete data[name];
+					
 				}
 			});
 			
@@ -44,12 +44,18 @@
 	};
 
 var configSpecial = {
+	env: {
+		set: function(val){
+			addProductionBundles();
+			return val;
+		}
+	},
 	root: {
 		get: function(){
-			return System.baseUrl;
+			return steal.System.baseURL;
 		},
 		set: function(val){
-			System.baseURL = val;
+			steal.System.baseURL = val;
 		}
 	},
 	configPath: {
@@ -66,10 +72,39 @@ var configSpecial = {
 	},
 	map: {
 		set: function(val){
-			extend(System.map,val);
+			extend(steal.System.map,val);
+		}
+	},
+	startId: {
+		set: function(val){
+			System.main = normalize(val);
+			addProductionBundles();
+		},
+		get: function(){
+			return System.main;
+		}
+	},
+	meta: {
+		set: function(val) {
+			extend(steal.System.meta, val);
+		},
+		get: function(){
+			return steal.System.meta;
 		}
 	}
 };
+
+var addProductionBundles = function(){
+	if(configData.env === "production" && System.main) {		
+		var main = System.main,
+			bundlesDir = System.bundlesPath || "bundles/",
+			bundleName = bundlesDir+filename(main);
+		
+		System.meta[bundleName] = {format:"amd"};
+		System.bundles[bundleName] = [main];
+	}
+};
+
 
 configSpecial.configUrl = configSpecial.configPath;
 

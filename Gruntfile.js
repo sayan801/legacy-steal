@@ -15,14 +15,24 @@ module.exports = function (grunt) {
           'bower_components/es6-module-loader/dist/es6-module-loader.js',
           'bower_components/systemjs/dist/system.js',
           'src/start.js',
+          'src/normalize.js',
           'src/core.js',
+          'src/normalize.js',
           'src/config.js',
           'src/startup.js',
-          'src/end.js',
-          'src/system-format-steal.js'
-          
+          'src/system-format-steal.js',
+          'src/end.js'
         ],
         dest: '<%= pkg.name %>.js'
+      },
+      systemFormat: {
+      	src: [
+      		'src/system-format-start.js',
+      		'src/normalize.js',
+      		'src/system-format-steal.js',
+      		'src/system-format-end.js'
+      	],
+      	dest: 'system-format-steal.js'
       }
     },
     uglify: {

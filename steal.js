@@ -1361,7 +1361,6 @@ function logloads(loads) {
       var options = { sourceMapGenerator: sourceMapGenerator };
 
       var source = traceur.outputgeneration.TreeWriter.write(tree, options);
-
       if (global.btoa)
         source += '\n//# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(options.sourceMap))) + '\n';
 
@@ -1370,12 +1369,10 @@ function logloads(loads) {
         for (var i = 0; i < deps.length; i++)
           deps[i] = module.dependencies[deps[i]];
 
-        global.System = loader;
         module.module = new Module(execute.apply(global, deps));
-        global.System = sys;
       }
 
-      __eval(source, global, module.name);
+      __eval(source, global, module.address, module.name);
 
       System.register = sysRegister;
     }
@@ -1409,8 +1406,7 @@ function logloads(loads) {
             load.module = {
               name: load.name,
               dependencies: load.dependencies,
-              body: load.body,
-              address: load.address
+              body: load.body
             };
           }
           else {
@@ -1633,13 +1629,15 @@ function logloads(loads) {
 
   })();
 
-  function __eval(__source, global, __moduleName) {
+  function __eval(__source, global, __sourceURL, __moduleName) {
     try {
-      eval('var __moduleName = "' + (__moduleName || '').replace('"', '\"') + '"; with(global) { (function() { ' + __source + ' \n }).call(global); }');
+      eval('var __moduleName = "' + (__moduleName || '').replace('"', '\"') + '"; with(global) { (function() { ' + __source + ' \n }).call(global); }'
+        + (__sourceURL && !__source.match(/\/\/[@#] ?(sourceURL|sourceMappingURL)=([^\n]+)/)
+        ? '\n//# sourceURL=' + __sourceURL : ''));
     }
     catch(e) {
-      if (e.name == 'SyntaxError') 
-        e.message = 'Evaluating ' + (__sourceURL || __moduleName) + '\n\t' + e.message;
+      if (e.name == 'SyntaxError')
+        e.message = 'Evaluating ' + __sourceURL + '\n\t' + e.message;
       throw e;
     }
   }
@@ -2082,6 +2080,15 @@ function core(loader) {
 
       return Promise.resolve(loaderLocate.call(this, load));
     }
+    
+    var loaderTranslate = loader.translate;
+    loader.translate = function(load){
+      // add in meta here too in case System.define was used
+      var meta = loader.meta[load.name];
+      for (var p in meta)
+        load.metadata[p] = meta[p];
+      return loaderTranslate(load);
+    };
 
     // define exec for custom instantiations
     loader.__exec = function(load) {
@@ -2921,29 +2928,30 @@ function bundles(loader) {
       });
     }
     return loaderFetch.apply(this, arguments);
-  }
+  };
 
   var loaderLocate = loader.locate;
   loader.locate = function(load) {
     if (loader.bundles[load.name])
       load.metadata.bundle = true;
     return loaderLocate.call(this, load);
-  }
+  };
 
   var loaderInstantiate = loader.instantiate;
   loader.instantiate = function(load) {
+    var result = loaderInstantiate.apply(this, arguments);
     // if it is a bundle itself, it doesn't define anything
-    if (load.metadata.bundle)
+    if (load.metadata.bundle) {
       return {
         deps: [],
         execute: function() {
-          loader.__exec(load);
           return new Module({});
         }
       };
-
-    return loaderInstantiate.apply(this, arguments);
-  }
+    } else {
+      return result;
+    }
+  };
 
 }/*
   Implementation of the loader.register bundling method
@@ -3305,18 +3313,6 @@ function versions(loader) {
 		isString = function(o) {
 			return typeof o == "string";
 		},
-		normalize = function(name){
-			var last = filename(name);
-			// if it doesn't start with anything strange
-			if(	!/^(\w+(?:s)?:\/\/|\.|file|\/)/.test(name) &&
-				// and doesn't end with a dot
-				last.indexOf(".") == -1
-				) {
-				return name+"/"+last;
-			} else {
-				return name;
-			}
-		},
 		extend = function(d,s){
 			each(s, function(v, p){
 				d[p] = v;
@@ -3331,16 +3327,52 @@ function versions(loader) {
 				return uri;
 			}
 		},
-		filename = function(uri){
-			var lastSlash = uri.lastIndexOf("/"),
-				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
-			return matches ? matches[0] : "";
-		},
 		last = function(arr){
 			return arr[arr.length - 1];
 		};
 
-var makeSteal = function(System){ 
+
+	
+	var filename = function(uri){
+			var lastSlash = uri.lastIndexOf("/"),
+				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
+			return matches ? matches[0] : "";
+	};
+	
+	var ext = function(uri){
+		var fn = filename(uri);
+		var dot = fn.lastIndexOf(".");
+		if(dot !== -1) {
+			return fn.substr(dot+1)
+		} else {
+			return "";
+		}
+	};
+	
+	var normalize = function(name, loader){
+
+		var last = filename(name),
+			extension = ext(name);
+		// if the name ends with /
+		if(	name[name.length -1] === "/" ) {
+			return name+filename( name.substr(0, name.length-1) );
+		} else if(	!/^(\w+(?:s)?:\/\/|\.|file|\/)/.test(name) &&
+			// and doesn't end with a dot
+			 last.indexOf(".") === -1 
+			) {
+			return name+"/"+last;
+		} else {
+			if(extension === "js") {
+				return name.substr(0, last.indexOf("."));
+			} else {
+				return name;
+			}
+		}
+	};
+
+
+var makeSteal = function(System){
+	
 	var configDeferred,
 		devDeferred,
 		appDeferred;
@@ -3367,10 +3399,17 @@ var makeSteal = function(System){
 				return modules;
 			}
 		};
-		// wait until the config has loaded
-		return configDeferred.then(afterConfig,afterConfig);
+		if(steal.config().env === "production") {
+			return afterConfig();
+		} else {
+			// wait until the config has loaded
+			return configDeferred.then(afterConfig,afterConfig);
+		}
+		
 	};
+	
 	steal.System = System;
+	
 
 	var configData = {
 		env: "development"
@@ -3395,10 +3434,10 @@ var makeSteal = function(System){
 				if(special.set && data[name]){
 					var res = special.set(data[name]);
 					if(res !== undefined) {
-						data[name] = res;
-					} else {
-						delete data[name];
-					}
+						configData[name] = res;
+					} 
+					delete data[name];
+					
 				}
 			});
 			
@@ -3417,12 +3456,18 @@ var makeSteal = function(System){
 	};
 
 var configSpecial = {
+	env: {
+		set: function(val){
+			addProductionBundles();
+			return val;
+		}
+	},
 	root: {
 		get: function(){
-			return System.baseUrl;
+			return steal.System.baseURL;
 		},
 		set: function(val){
-			System.baseURL = val;
+			steal.System.baseURL = val;
 		}
 	},
 	configPath: {
@@ -3439,10 +3484,39 @@ var configSpecial = {
 	},
 	map: {
 		set: function(val){
-			extend(System.map,val);
+			extend(steal.System.map,val);
+		}
+	},
+	startId: {
+		set: function(val){
+			System.main = normalize(val);
+			addProductionBundles();
+		},
+		get: function(){
+			return System.main;
+		}
+	},
+	meta: {
+		set: function(val) {
+			extend(steal.System.meta, val);
+		},
+		get: function(){
+			return steal.System.meta;
 		}
 	}
 };
+
+var addProductionBundles = function(){
+	if(configData.env === "production" && System.main) {		
+		var main = System.main,
+			bundlesDir = System.bundlesPath || "bundles/",
+			bundleName = bundlesDir+filename(main);
+		
+		System.meta[bundleName] = {format:"amd"};
+		System.bundles[bundleName] = [main];
+	}
+};
+
 
 configSpecial.configUrl = configSpecial.configPath;
 
@@ -3543,11 +3617,12 @@ configSpecial.configUrl = configSpecial.configPath;
 		}
 	
 		// we only load things with force = true
-		if ( options.env == "production" && options.loadProduction && options.productionId ) {
-			steal({
-				id: config.attr().productionId,
-				force: true
+		if ( options.env == "production" ) {
+			
+			return steal.System.import(steal.System.main)["catch"](function(e){
+				console.log(e);
 			});
+			
 		} else if(options.env == "development"){
 			
 			configDeferred = steal.System.import("stealconfig");
@@ -3560,7 +3635,7 @@ configSpecial.configUrl = configSpecial.configPath;
 			});
 			
 			appDeferred = devDeferred.then(function(){
-				return steal.apply(null, [options.startId]);
+				return System.import(steal.System.main);
 			}).then(function(){
 				if(steal.dev) {
 					steal.dev.log("app loaded successfully")
@@ -3572,30 +3647,9 @@ configSpecial.configUrl = configSpecial.configPath;
 		}
 	};
 
-
 	return steal;	
 }
-	
-	if (typeof window != 'undefined') {
-		window.steal = makeSteal(System);
-		window.steal.startup();
-    }
-    else {
-    	var steal = makeSteal(System);
-		steal.System = System;
-		steal.dev = require("./dev/dev.js");
-		steal.clone = makeSteal;
-		module.exports = steal;
-		global.steal = steal;
-    }
 
-})(typeof window == "undefined" ? global : window);
-/*
-  SystemJS AMD Format
-  Provides the AMD module format definition at System.format.amd
-  as well as a RequireJS-style require on System.require
-*/
-(function() {
   
 
   // AMD Module Format Detection RegEx
@@ -3691,20 +3745,7 @@ configSpecial.configUrl = configSpecial.configPath;
 	      return load.metadata.factory.apply(loader.global, execs.deps) || execs.module && execs.module.exports;
 	    },
 	    normalize: function(name, refererName, refererAddress, baseNormalize){
-	      var last = name.split("/").pop() || "";
-	      // if it doesn't start with anything strange
-	      if(!/^(\w+(?:s)?:\/\/|\.|file|\/)/.test(name) &&
-	      	// and doesn't end with a dot
-	      	last.indexOf(".") == -1
-	      	) {
-	      	return baseNormalize(name+"/"+last, refererName, refererAddress)
-	      } else {
-	      	if( name.substr(-3) === ".js"  ) {
-	      		name = name.substr(0, name.length - 3);
-	      	}
-	      	
-	      	return baseNormalize(name, refererName, refererAddress)
-	      }
+	      return baseNormalize(normalize(name, this), refererName, refererAddress);
 	    }
 	  };
   	return loader;
@@ -3718,4 +3759,20 @@ configSpecial.configUrl = configSpecial.configPath;
   	steal.addFormat = addFormat;
   }
   
-})();
+
+
+	
+	if (typeof window != 'undefined') {
+		window.steal = makeSteal(System);
+		window.steal.startup();
+    }
+    else {
+    	var steal = makeSteal(System);
+		steal.System = System;
+		steal.dev = require("./dev/dev.js");
+		steal.clone = makeSteal;
+		module.exports = steal;
+		global.steal = steal;
+    }
+
+})(typeof window == "undefined" ? global : window);

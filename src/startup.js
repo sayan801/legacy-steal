@@ -94,11 +94,12 @@
 		}
 	
 		// we only load things with force = true
-		if ( options.env == "production" && options.loadProduction && options.productionId ) {
-			steal({
-				id: config.attr().productionId,
-				force: true
+		if ( options.env == "production" ) {
+			
+			return steal.System.import(steal.System.main)["catch"](function(e){
+				console.log(e);
 			});
+			
 		} else if(options.env == "development"){
 			
 			configDeferred = steal.System.import("stealconfig");
@@ -111,7 +112,7 @@
 			});
 			
 			appDeferred = devDeferred.then(function(){
-				return steal.apply(null, [options.startId]);
+				return System.import(steal.System.main);
 			}).then(function(){
 				if(steal.dev) {
 					steal.dev.log("app loaded successfully")
@@ -122,3 +123,6 @@
 			return appDeferred;
 		}
 	};
+
+	return steal;	
+}

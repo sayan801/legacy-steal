@@ -1,3 +1,5 @@
+var makeSteal = function(System){
+	
 	var configDeferred,
 		devDeferred,
 		appDeferred;
@@ -24,7 +26,14 @@
 				return modules;
 			}
 		};
-		// wait until the config has loaded
-		return configDeferred.then(afterConfig,afterConfig);
+		if(steal.config().env === "production") {
+			return afterConfig();
+		} else {
+			// wait until the config has loaded
+			return configDeferred.then(afterConfig,afterConfig);
+		}
+		
 	};
+	
 	steal.System = System;
+	

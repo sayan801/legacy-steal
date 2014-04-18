@@ -34,18 +34,6 @@
 		isString = function(o) {
 			return typeof o == "string";
 		},
-		normalize = function(name){
-			var last = filename(name);
-			// if it doesn't start with anything strange
-			if(	!/^(\w+(?:s)?:\/\/|\.|file|\/)/.test(name) &&
-				// and doesn't end with a dot
-				last.indexOf(".") == -1
-				) {
-				return name+"/"+last;
-			} else {
-				return name;
-			}
-		},
 		extend = function(d,s){
 			each(s, function(v, p){
 				d[p] = v;
@@ -60,13 +48,7 @@
 				return uri;
 			}
 		},
-		filename = function(uri){
-			var lastSlash = uri.lastIndexOf("/"),
-				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
-			return matches ? matches[0] : "";
-		},
 		last = function(arr){
 			return arr[arr.length - 1];
 		};
 
-var makeSteal = function(System){ 

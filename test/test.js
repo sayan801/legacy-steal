@@ -52,7 +52,8 @@ module("steal via system import");
 		  equal(m.name,"module.js", "module returned" );
 		  equal(m.bar.name, "bar", "module.js was not able to get bar");
 	      start();
-		}, function(){
+		}, function(err){
+			console.log(err)
 			ok(false, "steal not loaded");
 			start()
 		});
@@ -122,5 +123,8 @@ module("steal via system import");
 			'src="../../steal.js?configed" data-config-path="../config.js"'));
 	});
 	
+	asyncTest("product bundle works", function(){
+		makeIframe("production/prod.html");
+	});
 	
 })();
