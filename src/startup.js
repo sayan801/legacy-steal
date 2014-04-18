@@ -4,7 +4,7 @@
 			parts, src, query, startFile, env,
 			scripts = document.getElementsByTagName("script");
 	
-		script = scripts[scripts.length - 1];
+		var script = scripts[scripts.length - 1];
 	
 		if (script) {
 	
@@ -96,7 +96,7 @@
 		// we only load things with force = true
 		if ( options.env == "production" ) {
 			
-			return steal.System.import(steal.System.main)["catch"](function(e){
+			return appDeferred = steal.System.import(steal.System.main)["catch"](function(e){
 				console.log(e);
 			});
 			

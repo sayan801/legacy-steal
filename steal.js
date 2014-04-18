@@ -3231,9 +3231,9 @@ function versions(loader) {
 
 (function() {
   if (typeof window != 'undefined') {
-    var scripts = document.getElementsByTagName('script');
+    /*var scripts = document.getElementsByTagName('script');
     var curScript = scripts[scripts.length - 1];
-    __$global.systemMainEntryPoint = curScript.getAttribute('data-main');
+    __$global.systemMainEntryPoint = curScript.getAttribute('data-main');*/
   }
   
   __$global.upgradeSystemLoader = function(){
@@ -3268,11 +3268,11 @@ function versions(loader) {
   else {
     __$global.upgradeSystemLoader();
   }
-  if (typeof window != 'undefined') {
+  /*if (typeof window != 'undefined') {
     var configPath = curScript.getAttribute('data-config');
     if (configPath)
       document.write('<' + 'script type="text/javascript src="' + configPath + '">' + '<' + '/script>');
-  }
+  }*/
 })();
 
 
@@ -3455,6 +3455,21 @@ var makeSteal = function(System){
 		}
 	};
 
+var getSetToSystem = function(prop){
+	return {
+		get: function(){
+			return steal.System[prop];
+		},
+		set: function(val){
+			if(typeof val === "object" && typeof steal.System[prop] === "object") {
+				steal.System[prop] = extend(steal.System[prop] || {},val || {});
+			} else {
+				steal.System[prop] = val;
+			}
+		}
+	};
+};
+
 var configSpecial = {
 	env: {
 		set: function(val){
@@ -3462,31 +3477,16 @@ var configSpecial = {
 			return val;
 		}
 	},
-	root: {
-		get: function(){
-			return steal.System.baseURL;
-		},
-		set: function(val){
-			steal.System.baseURL = val;
-		}
-	},
-	configPath: {
+	root: getSetToSystem("baseURL"),
+	config: {
 		set: function(val){
 			var name = filename(val);
 			System.paths["stealconfig"] = name;
 			configSpecial.root.set(dir(val)+"/");
 		}
 	},
-	paths: {
-		set: function(val){
-			extend(System.paths,val);
-		}
-	},
-	map: {
-		set: function(val){
-			extend(steal.System.map,val);
-		}
-	},
+	paths: getSetToSystem("paths"),
+	map: getSetToSystem("map"),
 	startId: {
 		set: function(val){
 			System.main = normalize(val);
@@ -3496,15 +3496,10 @@ var configSpecial = {
 			return System.main;
 		}
 	},
-	meta: {
-		set: function(val) {
-			extend(steal.System.meta, val);
-		},
-		get: function(){
-			return steal.System.meta;
-		}
-	}
+	main: getSetToSystem("main"),
+	meta: getSetToSystem("meta")
 };
+
 
 var addProductionBundles = function(){
 	if(configData.env === "production" && System.main) {		
@@ -3517,17 +3512,13 @@ var addProductionBundles = function(){
 	}
 };
 
-
-configSpecial.configUrl = configSpecial.configPath;
-
-
 	var getScriptOptions = function () {
 	
 		var options = {},
 			parts, src, query, startFile, env,
 			scripts = document.getElementsByTagName("script");
 	
-		script = scripts[scripts.length - 1];
+		var script = scripts[scripts.length - 1];
 	
 		if (script) {
 	
@@ -3619,7 +3610,7 @@ configSpecial.configUrl = configSpecial.configPath;
 		// we only load things with force = true
 		if ( options.env == "production" ) {
 			
-			return steal.System.import(steal.System.main)["catch"](function(e){
+			return appDeferred = steal.System.import(steal.System.main)["catch"](function(e){
 				console.log(e);
 			});
 			

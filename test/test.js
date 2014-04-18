@@ -72,6 +72,8 @@ module("steal via system import");
 		});
 	});
 
+module("steal via html");
+
 	asyncTest("basics", function(){
 		makeIframe("basics/basics.html");
 		
@@ -80,7 +82,7 @@ module("steal via system import");
 	asyncTest("basics with generated html", function(){
 		writeIframe(makeStealHTML(
 			"basics/basics.html",
-			'src="../../steal.js?basics" data-config-path="../config.js"'));
+			'src="../../steal.js?basics" data-config="../config.js"'));
 	});
 	
 	asyncTest("default config path", function(){
@@ -120,7 +122,7 @@ module("steal via system import");
 	asyncTest("read config", function(){
 		writeIframe(makeStealHTML(
 			"basics/basics.html",
-			'src="../../steal.js?configed" data-config-path="../config.js"'));
+			'src="../../steal.js?configed" data-config="../config.js"'));
 	});
 	
 	asyncTest("product bundle works", function(){

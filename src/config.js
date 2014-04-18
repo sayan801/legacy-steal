@@ -43,6 +43,21 @@
 		}
 	};
 
+var getSetToSystem = function(prop){
+	return {
+		get: function(){
+			return steal.System[prop];
+		},
+		set: function(val){
+			if(typeof val === "object" && typeof steal.System[prop] === "object") {
+				steal.System[prop] = extend(steal.System[prop] || {},val || {});
+			} else {
+				steal.System[prop] = val;
+			}
+		}
+	};
+};
+
 var configSpecial = {
 	env: {
 		set: function(val){
@@ -50,31 +65,16 @@ var configSpecial = {
 			return val;
 		}
 	},
-	root: {
-		get: function(){
-			return steal.System.baseURL;
-		},
-		set: function(val){
-			steal.System.baseURL = val;
-		}
-	},
-	configPath: {
+	root: getSetToSystem("baseURL"),
+	config: {
 		set: function(val){
 			var name = filename(val);
 			System.paths["stealconfig"] = name;
 			configSpecial.root.set(dir(val)+"/");
 		}
 	},
-	paths: {
-		set: function(val){
-			extend(System.paths,val);
-		}
-	},
-	map: {
-		set: function(val){
-			extend(steal.System.map,val);
-		}
-	},
+	paths: getSetToSystem("paths"),
+	map: getSetToSystem("map"),
 	startId: {
 		set: function(val){
 			System.main = normalize(val);
@@ -84,15 +84,10 @@ var configSpecial = {
 			return System.main;
 		}
 	},
-	meta: {
-		set: function(val) {
-			extend(steal.System.meta, val);
-		},
-		get: function(){
-			return steal.System.meta;
-		}
-	}
+	main: getSetToSystem("main"),
+	meta: getSetToSystem("meta")
 };
+
 
 var addProductionBundles = function(){
 	if(configData.env === "production" && System.main) {		
@@ -104,7 +99,3 @@ var addProductionBundles = function(){
 		System.bundles[bundleName] = [main];
 	}
 };
-
-
-configSpecial.configUrl = configSpecial.configPath;
-
