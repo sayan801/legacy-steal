@@ -3557,17 +3557,17 @@ var addProductionBundles = function(){
 			var lastPart = parts.pop();
 			
 			if(lastPart.indexOf("steal") === 0 && !System.paths["steal/dev/dev"]) {
-				System.paths["steal/dev/dev"] = parts.join("/")+"/dev/dev.js"
+				options.paths = {
+					"steal/*": parts.join("/")+"/*.js",
+					"@traceur": parts.slice(0,-1).join("/")+"/traceur/traceur.js"
+				};
+				
 			}
 			
 			if ( last(parts) === "steal" ) {
 				parts.pop();
 				if ( last(parts) === "bower_components" ) {
 					parts.pop();
-					options.paths = {
-						"steal/*" : "bower_components/steal/*.js",
-						"@traceur": "bower_components/traceur/traceur.js"
-					};
 				}
 			}
 			var root = parts.join("/");
@@ -3587,10 +3587,14 @@ var addProductionBundles = function(){
 	};
 	
 	var getOptionsFromStealLocation = function(){
+		var options = {};
 		if(typeof __dirname === "string" && !System.paths["steal/dev/dev"]) {
-			__dirname+"/dev/dev.js"
+			options.paths = {
+				"steal/*": __dirname+"/*.js",
+				"@traceur": __dirname.split("/").slice(0,-1).join("/")+"/traceur/traceur.js"
+			};
 		}
-		return {};
+		return options;
 	};
 	
 	steal.startup = function(){
