@@ -104,7 +104,4 @@
   	addFormat(System);
   }
 
-  if(typeof steal !== "undefined") {
-  	steal.addFormat = addFormat;
-  }
   

@@ -3755,9 +3755,6 @@ configSpecial.configUrl = configSpecial.configPath;
   	addFormat(System);
   }
 
-  if(typeof steal !== "undefined") {
-  	steal.addFormat = addFormat;
-  }
   
 
 
@@ -3765,6 +3762,7 @@ configSpecial.configUrl = configSpecial.configPath;
 	if (typeof window != 'undefined') {
 		window.steal = makeSteal(System);
 		window.steal.startup();
+		window.steal.addFormat = addFormat;
     }
     else {
     	var steal = makeSteal(System);
@@ -3773,6 +3771,8 @@ configSpecial.configUrl = configSpecial.configPath;
 		steal.clone = makeSteal;
 		module.exports = steal;
 		global.steal = steal;
+		global.steal.addFormat = addFormat;
     }
-
+  	
+  
 })(typeof window == "undefined" ? global : window);
