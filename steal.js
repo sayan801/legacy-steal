@@ -3492,14 +3492,19 @@ var configSpecial = {
 	map: getSetToSystem("map"),
 	startId: {
 		set: function(val){
-			System.main = normalize(val);
-			addProductionBundles();
+			configSpecial.main.set(  normalize(val) );
 		},
 		get: function(){
 			return System.main;
 		}
 	},
-	main: getSetToSystem("main"),
+	main: {
+		get: getSetToSystem("main").get,
+		set: function(val){
+			System.main = val;
+			addProductionBundles();
+		}
+	},
 	meta: getSetToSystem("meta")
 };
 

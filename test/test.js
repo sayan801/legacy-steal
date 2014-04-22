@@ -125,8 +125,12 @@ module("steal via html");
 			'src="../../steal.js?configed" data-config="../config.js"'));
 	});
 	
-	asyncTest("product bundle works", function(){
+	asyncTest("compat - product bundle works", function(){
 		makeIframe("production/prod.html");
+	});
+	
+	asyncTest("product bundle specifying main works", function(){
+		makeIframe("production/prod-main.html");
 	});
 	
 })();
