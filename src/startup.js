@@ -133,7 +133,12 @@
 			});
 			
 			appDeferred = devDeferred.then(function(){
-				return System.import(steal.System.main);
+				
+				// if there's a main, get it, otherwise, we are just loading
+				// the config.
+				return steal.System.main ? 
+					System.import(steal.System.main):
+					configDeferred;
 			}).then(function(){
 				if(steal.dev) {
 					steal.dev.log("app loaded successfully")
