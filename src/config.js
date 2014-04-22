@@ -18,6 +18,7 @@
 				}
 			}
 		} else if(typeof data === "object") {
+			data = extend({},data);
 			each(configSpecial, function(special, name){
 				if(special.set && data[name]){
 					var res = special.set(data[name]);
