@@ -1361,6 +1361,7 @@ function logloads(loads) {
       var options = { sourceMapGenerator: sourceMapGenerator };
 
       var source = traceur.outputgeneration.TreeWriter.write(tree, options);
+
       if (global.btoa)
         source += '\n//# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(options.sourceMap))) + '\n';
 
@@ -1369,10 +1370,12 @@ function logloads(loads) {
         for (var i = 0; i < deps.length; i++)
           deps[i] = module.dependencies[deps[i]];
 
+        global.System = loader;
         module.module = new Module(execute.apply(global, deps));
+        global.System = sys;
       }
 
-      __eval(source, global, module.address, module.name);
+      __eval(source, global, module.name);
 
       System.register = sysRegister;
     }
@@ -1406,7 +1409,8 @@ function logloads(loads) {
             load.module = {
               name: load.name,
               dependencies: load.dependencies,
-              body: load.body
+              body: load.body,
+              address: load.address
             };
           }
           else {
@@ -1629,15 +1633,13 @@ function logloads(loads) {
 
   })();
 
-  function __eval(__source, global, __sourceURL, __moduleName) {
+  function __eval(__source, global, __moduleName) {
     try {
-      eval('var __moduleName = "' + (__moduleName || '').replace('"', '\"') + '"; with(global) { (function() { ' + __source + ' \n }).call(global); }'
-        + (__sourceURL && !__source.match(/\/\/[@#] ?(sourceURL|sourceMappingURL)=([^\n]+)/)
-        ? '\n//# sourceURL=' + __sourceURL : ''));
+      eval('var __moduleName = "' + (__moduleName || '').replace('"', '\"') + '"; with(global) { (function() { ' + __source + ' \n }).call(global); }');
     }
     catch(e) {
-      if (e.name == 'SyntaxError')
-        e.message = 'Evaluating ' + __sourceURL + '\n\t' + e.message;
+      if (e.name == 'SyntaxError') 
+        e.message = 'Evaluating ' + (__sourceURL || __moduleName) + '\n\t' + e.message;
       throw e;
     }
   }
@@ -3333,8 +3335,7 @@ function versions(loader) {
 		};
 
 
-	
-	var filename = function(uri){
+		var filename = function(uri){
 			var lastSlash = uri.lastIndexOf("/"),
 				matches = ( lastSlash == -1 ? uri : uri.substr(lastSlash+1) ).match(/^[\w-\s\.]+/);
 			return matches ? matches[0] : "";
