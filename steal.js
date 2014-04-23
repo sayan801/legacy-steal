@@ -2056,7 +2056,7 @@ function core(loader) {
     }
     var baseURI;
     if (typeof window == 'undefined') {
-      baseURI = __dirname;
+      baseURI = __dirname + '/';
     }
     else {
       baseURI = document.baseURI;
@@ -2131,7 +2131,8 @@ function core(loader) {
       throw e;
     }
   }
-}/*
+}
+/*
   SystemJS Formats
 
   Provides modular support for format detections.
@@ -2290,7 +2291,7 @@ function formatAMD(loader) {
   // AMD Module Format Detection RegEx
   // define([.., .., ..], ...)
   // define(varName); || define(function(require, exports) {}); || define({})
-  var amdRegEx = /(?:^\s*|[}{\(\);,\n\?\&]\s*)define\s*\(\s*("[^"]+"\s*,|'[^']+'\s*,\s*)?(\[(\s*("[^"]+"|'[^']+')\s*,)*(\s*("[^"]+"|'[^']+')\s*)?\]|function\s*|{|[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*\))/;
+  var amdRegEx = /(?:^\s*|[}{\(\);,\n\?\&]\s*)define\s*\(\s*("[^"]+"\s*,\s*|'[^']+'\s*,\s*)?(\[(\s*("[^"]+"|'[^']+')\s*,)*(\s*("[^"]+"|'[^']+')\s*)?\]|function\s*|{|[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*\))/;
 
   /*
     AMD-compatible require
@@ -2978,6 +2979,13 @@ function register(loader) {
     };
   }
   
+  var loaderLocate = loader.locate;
+  loader.locate = function(load) {
+    if (loader.defined[load.name])
+      return '';
+    return loaderLocate.apply(this, arguments);
+  }
+  
   var loaderFetch = loader.fetch;
   loader.fetch = function(load) {
     // if the module is already defined, skip fetch
@@ -3371,6 +3379,7 @@ function versions(loader) {
 			}
 		}
 	};
+
 
 
 var makeSteal = function(System){
