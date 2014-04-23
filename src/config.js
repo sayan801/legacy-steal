@@ -1,4 +1,3 @@
-
 	var configData = {
 		env: "development"
 	};

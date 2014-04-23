@@ -2850,7 +2850,7 @@ function plugins(loader) {
         load.metadata.plugin = plugin;
         load.metadata.pluginName = pluginName;
         load.metadata.pluginArgument = load.name;
-
+		load.metadata.buildType = plugin.buildType || "js";
         // run plugin locate if given
         if (plugin.locate)
           return plugin.locate.call(loader, load);
@@ -2891,7 +2891,16 @@ function plugins(loader) {
 
     return loaderTranslate.call(this, load);
   };
+  
+  var loaderInstantiate = loader.instantiate;
+  loader.instantiate = function(load){
+  	var plugin = load.metadata.plugin;
+    if (plugin && plugin.instantiate)
+      return plugin.instantiate.call(this, load);
 
+    return loaderInstantiate.call(this, load);
+  };
+  
 }/*
   System bundles
 
@@ -3422,7 +3431,6 @@ var makeSteal = function(System){
 	
 	steal.System = System;
 	
-
 	var configData = {
 		env: "development"
 	};

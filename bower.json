@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "qunit": "~1.12.0",
-    "systemjs" : "git://github.com/bitovi/systemjs.git#671bb9b46258c1eb80ef4f0089ca8a804372fc66",
+    "systemjs" : "git://github.com/bitovi/systemjs.git#3deafad32ceff0af304eb14117a038fbd4b80dce",
     "es6-module-loader": "git://github.com/ModuleLoader/es6-module-loader.git#7a4c870b4b7ee21338fd249e836b151676f79194"
   },
   "dependencies": {
