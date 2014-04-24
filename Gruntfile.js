@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 		}
     },
 	watch: {
-		files: [ "src/*.js"],
+		files: [ "src/*.js","bower_components/systemjs/dist/**"],
 		tasks: "default"
 	}
   });

@@ -2951,22 +2951,6 @@ function bundles(loader) {
     return loaderLocate.call(this, load);
   };
 
-  var loaderInstantiate = loader.instantiate;
-  loader.instantiate = function(load) {
-    var result = loaderInstantiate.apply(this, arguments);
-    // if it is a bundle itself, it doesn't define anything
-    if (load.metadata.bundle) {
-      return {
-        deps: [],
-        execute: function() {
-          return new Module({});
-        }
-      };
-    } else {
-      return result;
-    }
-  };
-
 }/*
   Implementation of the loader.register bundling method
 
@@ -3803,7 +3787,6 @@ var addProductionBundles = function(){
   
 
 
-	
 	if (typeof window != 'undefined') {
 		window.steal = makeSteal(System);
 		window.steal.startup();

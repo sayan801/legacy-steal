@@ -1,5 +1,4 @@
 
-	
 	if (typeof window != 'undefined') {
 		window.steal = makeSteal(System);
 		window.steal.startup();

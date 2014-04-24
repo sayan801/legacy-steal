@@ -137,4 +137,8 @@ module("steal via html");
 		makeIframe("plugins/site.html");
 	});
 	
+	asyncTest("product bundle with css", function(){
+		makeIframe("production/prod-bar.html");
+	});
+	
 })();
