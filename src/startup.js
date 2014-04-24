@@ -91,7 +91,9 @@
 		} else {
 			var urlOptions = getOptionsFromStealLocation();
 		}
-		
+		if(!System.map.css) {
+			System.map.css = "steal/css";	
+		}
 	
 		// B: DO THINGS WITH OPTIONS
 		// CALCULATE CURRENT LOCATION OF THINGS ...

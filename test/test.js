@@ -133,4 +133,8 @@ module("steal via html");
 		makeIframe("production/prod-main.html");
 	});
 	
+	asyncTest("automatic loading of css plugin", function(){
+		makeIframe("plugins/site.html");
+	});
+	
 })();
