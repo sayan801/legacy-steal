@@ -3,6 +3,9 @@ exports.instantiate = function(load) {
     return {
 			deps: [],
 			execute: function(){
+				if(!load.source) {
+					return;
+				}
 				var head = document.head || document.getElementsByTagName('head')[0],
 					style = document.createElement('style');
 				
