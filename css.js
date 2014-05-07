@@ -22,4 +22,4 @@ exports.instantiate = function(load) {
 };
 
 exports.buildType = "css";
-exports.includInBuild = true;
+exports.includeInBuild = true;

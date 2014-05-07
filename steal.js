@@ -2549,7 +2549,7 @@ function formatCJS(loader) {
             return loader.getModule(depNames[index]);
         },
         __filename: load.address,
-        __dirname: dirname,
+        __dirname: dirname
       };
       globals.module = { exports: globals.exports };
 
