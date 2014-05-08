@@ -68,9 +68,10 @@ var configSpecial = {
 	root: getSetToSystem("baseURL"),
 	config: {
 		set: function(val){
-			var name = filename(val);
+			var name = filename(val),
+				root = dir(val);
 			System.paths["stealconfig"] = name;
-			configSpecial.root.set(dir(val)+"/");
+			configSpecial.root.set( (root === val ? "." : root)  +"/");
 		}
 	},
 	paths: getSetToSystem("paths"),

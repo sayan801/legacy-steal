@@ -2549,7 +2549,7 @@ function formatCJS(loader) {
             return loader.getModule(depNames[index]);
         },
         __filename: load.address,
-        __dirname: dirname
+        __dirname: dirname,
       };
       globals.module = { exports: globals.exports };
 
@@ -3367,7 +3367,7 @@ function versions(loader) {
 			return name+"/"+last;
 		} else {
 			if(extension === "js") {
-				return name.substr(0, last.indexOf("."));
+				return name.substr(0, name.lastIndexOf("."));
 			} else {
 				return name;
 			}
@@ -3485,9 +3485,10 @@ var configSpecial = {
 	root: getSetToSystem("baseURL"),
 	config: {
 		set: function(val){
-			var name = filename(val);
+			var name = filename(val),
+				root = dir(val);
 			System.paths["stealconfig"] = name;
-			configSpecial.root.set(dir(val)+"/");
+			configSpecial.root.set( (root === val ? "." : root)  +"/");
 		}
 	},
 	paths: getSetToSystem("paths"),
@@ -3677,7 +3678,7 @@ var addProductionBundles = function(){
 	};
 
 	return steal;	
-}
+};
 
   
 

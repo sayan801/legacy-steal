@@ -28,7 +28,7 @@
 			return name+"/"+last;
 		} else {
 			if(extension === "js") {
-				return name.substr(0, last.indexOf("."));
+				return name.substr(0, name.lastIndexOf("."));
 			} else {
 				return name;
 			}
