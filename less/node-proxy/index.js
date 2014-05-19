@@ -80,22 +80,24 @@ function processLess() {
 
 			less.render(lessString, {
 
-				//render options + parser options
-				compress: opts.compress || true,
-				sourceMap: opts.sourceMap || true,
-				writeSourceMap: sourceMapCallback,
-				sourceMapRootpath: "",
-				sourceMapURL : sourceMapUrl
+					//render options + parser options
+					compress: opts.compress || true,
+					sourceMap: opts.sourceMap || true,
+					writeSourceMap: sourceMapCallback,
+					sourceMapRootpath: "",
+					sourceMapURL: sourceMapUrl
 
-			}, function (e, css) {
-				if(e){
-					console.log("STEAL NODE PROXY :: ERROR :: ",e);
-					throw e;
-				}
-				response.writeHead(200, "OK");
-				response.write(css);
-				response.end();
-			});
+				}, function(e, css) {
+					if(e) {
+						console.log("STEAL NODE PROXY :: ERROR :: ", e);
+
+						css = "body:before { content : 'LESS PARSING ERROR: " + JSON.stringify(e) + "'}";
+					}
+					response.writeHead(200, "OK");
+					response.write(css);
+					response.end();
+				});
+
 		}else{
 			response.writeHead(204, "No Content Available (empty source param)")
 		}
