@@ -48,7 +48,7 @@ steal('steal',function( steal ) {
 
 				runCommand("steal/node_modules/less/bin/lessc", filename, "-x", "--clean-css", oFilename);
 
-				outputString = readFile(oFilename,"utf-8");
+				outputString = readFile(oFilename,"UTF-8");
 
 				tmpfile.remove();
 				outfile.remove();

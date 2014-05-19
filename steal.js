@@ -1327,7 +1327,7 @@ ConfigManager.defaults.types = {
 		}else if(steal.isRhino){
 			fileUri = options.idToUri(options.id,true);
 			if((options.type !== "mustache") && (options.type !== "ejs")){
-				options.text = readFile(fileUri);
+				options.text = readFile(fileUri, 'UTF-8');
 				eval.call(null,options.text);
 			}
 			success();

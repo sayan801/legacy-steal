@@ -185,7 +185,7 @@ steal('steal', 'steal/parse','steal/build',
 					s.print("  + "+id)
 					// get the content for the module
 					if( moduleOptions.buildType === "css" ) {
-						cssOut += moduleOptions.text || readFile( opener.steal.idToUri( moduleOptions.id, true) )
+						cssOut += moduleOptions.text || readFile( opener.steal.idToUri( moduleOptions.id, true), 'UTF-8' )
 					} else {
 						
 						// get the "js" file this "fn" module represents
@@ -289,7 +289,7 @@ steal('steal', 'steal/parse','steal/build',
 		if(param.length) {
 			param = 'module["' + param.join('"], module["') + '"]';
 		}
-		var content = module.options.text || readFile( s.idToUri( module.options.id, true)   )
+		var content = module.options.text || readFile( s.idToUri( module.options.id, true) , 'UTF-8' )
 		
 		if (/steal[.\(]/.test(content)) {
 			content = s.build.pluginify.getFunction(content, funcCount, opts.onefunc);

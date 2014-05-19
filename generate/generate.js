@@ -2,7 +2,7 @@ steal("steal","steal/generate/ejs.js", 'steal/generate/inflector.js',
 	'steal/parse', 'steal/rhino/prompt.js', function(s, EJS, Inflector, parse ) {
 
 	var render = function( from, to, data ) {
-		var text = readFile(from);
+		var text = readFile(from, 'utf-8');
 
 		var res = new EJS({
 			text: text,

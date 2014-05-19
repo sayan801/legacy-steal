@@ -112,20 +112,20 @@ steal('steal','steal/parse',function(steal, parse){
 					err : ''
 				};
 
-				tmpfile.save(src);
+				tmpfile.save(src,'UTF-8');
 
 				runCommand("steal/node_modules/uglify-js/bin/uglifyjs",
 					"--lift-vars",
 					"--unsafe",
 					"--mangle-toplevel",
 					"--reserved-names \"steal\"",
-					"-o",oFilename, filename, options);
+					"-o", oFilename, filename, options);
 
 				if(options.err.length>0){
 					print(options.err);
 				}
 
-				outputString = readFile(oFilename);
+				outputString = readFile(oFilename, 'UTF-8');
 
 				tmpfile.remove();
 				outfile.remove();
@@ -264,7 +264,7 @@ steal('steal','steal/parse',function(steal, parse){
 					}
 				}
 				tmpfile.remove();
-				outputString = readFile(oFilename,"utf-8");
+				outputString = readFile(oFilename,"UTF-8");
 				outfile.remove();
 
 				return outputString;
@@ -289,7 +289,7 @@ steal('steal','steal/parse',function(steal, parse){
 					"-jar", 
 					"steal/build/js/yuicompressor.jar", 
 					"--charset",
-					"utf-8",
+					"UTF-8",
 					filename, 
 					{ output: output }
 				);

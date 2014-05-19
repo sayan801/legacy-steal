@@ -290,7 +290,7 @@ steal('steal',function(s){
 									if(options.text){
 										text = options.text;
 									}else{
-										text = readFile(options.id);
+										text = readFile(options.id, 'UTF-8');
 									}
 									// check if steal is in this file
 									var stealInFile = /steal\(/.test(text);
@@ -366,7 +366,7 @@ steal('steal',function(s){
 		
 		if ( url.match(/^file\:/) ) {
 			url = url.replace("file:/", "");
-			text = readFile("/" + url);
+			text = readFile("/" + url, 'UTF-8');
 		}
 
 		if ( url.match(/^http\:/) ) {

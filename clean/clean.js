@@ -128,7 +128,7 @@ steal('steal','steal/build','steal/clean/beautify.js','steal/clean/jslint.js','s
 		
 		//if it ends with js, just rewwrite
 		if(/\.js/.test(url)){
-			var text = readFile(url);
+			var text = readFile(url, 'utf-8');
 			print('Beautifying '+url)
 			var out = js_beautify(text, options);
 			if(options.print){

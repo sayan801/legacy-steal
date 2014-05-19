@@ -87,14 +87,16 @@
 			me.setExecutable(true);
 			return this;
 		},
-		save: function( src, encoding ) {
-			var fout = new java.io.FileOutputStream(new java.io.File(''+this));
+		save: function( src ) {
+			var out, fout, filename;
 
-			var out = new java.io.OutputStreamWriter(fout, "UTF-8");
-			var s = new java.lang.String(src || "");
+			filename = "" + this;
+			fout = new java.io.FileOutputStream(new java.io.File(filename));
+			out = new java.io.OutputStreamWriter(fout, "UTF-8");
 
-			var text = new java.lang.String((s).getBytes(), encoding || "UTF-8");
-			out.write(text, 0, text.length());
+			src = src || "";
+
+			out.write(src, 0, src.length);
 			out.flush();
 			out.close();
 		},

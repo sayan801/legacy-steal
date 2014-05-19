@@ -69,7 +69,7 @@ steal('steal', 'steal/parse', 'steal/build', 'steal/build/pluginify', function(s
 		createModule = function(name, excludes, options) {
 			getDependencies(name, excludes, options, function(steals) {
 				steals.forEach(function(stl) {
-					var content = convertContents(readFile(stl.id), options);
+					var content = convertContents(readFile(stl.id, 'UTF-8'), options);
 					writeContents(content, options, stl);
 				});
 			});
