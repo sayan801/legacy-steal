@@ -42,16 +42,25 @@ steal('steal',function( steal ) {
 					oFilename = filename + '.out',
 					tmpfile = new steal.URI(filename),
 					outfile = new steal.URI(oFilename),
-					outputString;
+					outputString,
+					out = {
+						err : ''
+					};
 
 				tmpfile.save(cssString);
 
-				runCommand("steal/node_modules/less/bin/lessc", filename, "-x", "--clean-css", oFilename);
-
-				outputString = readFile(oFilename,"UTF-8");
+				//this is saved to file / read back because it usually exceeds size of stdout buffer
+				var parse = runCommand("steal/node_modules/less/bin/lessc", filename, "-x", "--clean-css", oFilename, out);
 
 				tmpfile.remove();
-				outfile.remove();
+
+				if(parse == 0){
+					outputString = readFile(oFilename,"UTF-8");
+					outfile.remove();
+				}else{
+					console.log("######LESS PARSING ERROR\noutput will not be written!");
+					throw new Error(out.err);
+				}
 
 				return outputString;
 			}
