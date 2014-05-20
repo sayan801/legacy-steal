@@ -47,6 +47,7 @@ steal('steal',function( steal ) {
 						err : ''
 					};
 
+				console.log("steal.build.css :: compiling css artifact from less source using node_modules/less/bin/lessc");
 				tmpfile.save(cssString);
 
 				//this is saved to file / read back because it usually exceeds size of stdout buffer
