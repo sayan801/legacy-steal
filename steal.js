@@ -3608,7 +3608,7 @@ var addProductionBundles = function(){
 		return options;
 	};
 	
-	steal.startup = function(){
+	steal.startup = function(config){
 		
 		// get options from the script tag
 		if(global.document) {
@@ -3653,6 +3653,12 @@ var addProductionBundles = function(){
 			configDeferred = steal.System.import("stealconfig");
 			
 			devDeferred = configDeferred.then(function(){
+				// If a configuration was passed to startup we'll use that to overwrite
+ 				// what was loaded in stealconfig.js
+				if(config) {
+					steal.config(config);
+				}
+
 				return steal("steal/dev");
 			},function(){
 				console.log("steal - error loading stealconfig.");
@@ -3679,6 +3685,7 @@ var addProductionBundles = function(){
 
 	return steal;	
 };
+
 
   
 
