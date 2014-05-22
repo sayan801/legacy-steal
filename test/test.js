@@ -141,4 +141,10 @@ module("steal via html");
 		makeIframe("production/prod-bar.html");
 	});
 	
+	asyncTest("automatic loading of less plugin", function(){
+		makeIframe("dep_plugins/site.html");
+	});
+	
+	
+	
 })();
