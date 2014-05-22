@@ -14,7 +14,7 @@ export function translate(load) {
 		paths = [pathParts.join('/')];
 	}
 	return new Promise(function(resolve, reject){
-		new (less.Parser)({
+		new (lessEngine.Parser)({
 	        optimization: less.optimization,
 	        paths: [pathParts.join('/')]
 	    }).parse(load.source, function (e, root) {
