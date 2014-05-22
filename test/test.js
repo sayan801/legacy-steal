@@ -162,6 +162,12 @@ module("steal via html");
 	asyncTest("automatic loading of less plugin", function(){
 		makeIframe("dep_plugins/site.html");
 	});
+
+	asyncTest("Using path's * qualifier", function(){
+		writeIframe(makeStealHTML(
+			"basics/basics.html",
+			'src="../steal.js?../paths" data-config="../paths/config.js"'));
+	});
 	
 	
 	
