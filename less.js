@@ -14,14 +14,14 @@ export function translate(load) {
 		paths = [pathParts.join('/')];
 	}
 	return new Promise(function(resolve, reject){
-		new (less.Parser)({
-	        optimization: less.optimization,
+		new (lessEngine.Parser)({
+	        optimization: lessEngine.optimization,
 	        paths: [pathParts.join('/')]
 	    }).parse(load.source, function (e, root) {
 			if(e){
 				reject(e);
 			} else {
-				resolve(root.toCSS())
+				resolve(root.toCSS());
 			}
 		});
 	});
