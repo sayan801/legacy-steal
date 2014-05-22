@@ -15,13 +15,13 @@ export function translate(load) {
 	}
 	return new Promise(function(resolve, reject){
 		new (lessEngine.Parser)({
-	        optimization: less.optimization,
+	        optimization: lessEngine.optimization,
 	        paths: [pathParts.join('/')]
 	    }).parse(load.source, function (e, root) {
 			if(e){
 				reject(e);
 			} else {
-				resolve(root.toCSS())
+				resolve(root.toCSS());
 			}
 		});
 	});
