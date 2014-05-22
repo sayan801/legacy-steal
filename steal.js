@@ -3618,9 +3618,7 @@ var addProductionBundles = function(){
 		if(!System.map.css) {
 			System.map.css = "steal/css";	
 		}
-		if(!System.map.less) {
-			System.map.less = "steal/less";	
-		}
+
 		// B: DO THINGS WITH OPTIONS
 		// CALCULATE CURRENT LOCATION OF THINGS ...
 		steal.config(urlOptions);

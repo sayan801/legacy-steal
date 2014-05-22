@@ -1,5 +1,5 @@
 import css from 'steal/css';
-import lessEngine from 'steal/less_engine';
+import lessEngine from 'less';
 
 export var instantiate = css.instantiate;
 

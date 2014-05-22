@@ -9,5 +9,8 @@
   },
   "dependencies": {
     "traceur": "0.0.32"
+  },
+  "devDependencies": {
+    "less": "1.7.0"
   }
 }
