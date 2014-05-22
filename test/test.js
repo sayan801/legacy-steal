@@ -72,6 +72,15 @@ module("steal via system import");
 		});
 	});
 
+	asyncTest("steal's normalize with a plugin", function(){
+		var stealFormat = System.format.steal;
+		stealFormat.normalize("foo/bar!foo/bar", "foo", "http://foo", System.normalize)
+			.then(function(result){
+				equal(result, "foo/bar/bar!foo/bar", "normalize fixed part before !");
+				start();
+			});
+	});
+
 module("steal via html");
 
 	asyncTest("basics", function(){
