@@ -81,6 +81,15 @@ module("steal via system import");
 			});
 	});
 
+	asyncTest("steal's normalize with plugin only the bang", function(){
+		var stealFormat = System.format.steal;
+		stealFormat.normalize("./rdfa.stache!", "foo", "http://foo", System.normalize)
+			.then(function(result){
+				equal(result, "rdfa.stache!stache", "normalize added the extension as plugin name");
+				start();
+			});
+	});
+
 module("steal via html");
 
 	asyncTest("basics", function(){

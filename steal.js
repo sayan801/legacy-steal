@@ -3359,7 +3359,7 @@ function versions(loader) {
 		var bangIndex = name.lastIndexOf("!");
 		if(bangIndex >= 0 ){
 			pluginPart = name.substr(bangIndex);
-			name = name.substr(0, pluginPart.length - 1);
+			name = name.substr(0, name.length - pluginPart.length);
 		}
 
 		var last = filename(name),
