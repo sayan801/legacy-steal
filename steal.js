@@ -3352,14 +3352,29 @@ function versions(loader) {
 			return "";
 		}
 	};
+
+
+	var pluginCache = {};
 	
 	var normalize = function(name, loader){
 
+		// Detech if this name contains a plugin part like: app.less!steal/less
+		// and catch the plugin name so that when it is normalized we do not perform
+		// Steal's normalization against it.
+		var pluginIndex = name.lastIndexOf('!');
 		var pluginPart = "";
-		var bangIndex = name.lastIndexOf("!");
-		if(bangIndex >= 0 ){
-			pluginPart = name.substr(bangIndex);
-			name = name.substr(0, name.length - pluginPart.length);
+		if (pluginIndex != -1) {
+			// argumentName is the part before the !
+			var argumentName = name.substr(0, pluginIndex);
+			var pluginName = name.substr(pluginIndex + 1) || argumentName.substr(argumentName.lastIndexOf('.') + 1);
+			pluginPart = "!" + pluginName;
+			pluginCache[pluginName] = true;
+
+			// Set the name to the argument name so that we can normalize it alone.
+			name = argumentName;
+		} else if(pluginCache[name]) {
+			// This is a plugin so just return the name unnormalized.
+			return name;
 		}
 
 		var last = filename(name),
