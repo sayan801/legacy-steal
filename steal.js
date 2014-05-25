@@ -2557,7 +2557,6 @@ function formatCJS(loader) {
       for (var _g in globals)
         glString += 'var ' + _g + ' = _g.' + _g + ';';
 
-      load.source = glString + load.source;
       var execLoad = {
       	name: load.name,
       	source: glString + load.source,
@@ -3834,5 +3833,5 @@ var addProductionBundles = function(){
 		global.steal = steal;
 		global.steal.addFormat = addFormat;
     }
-  
+    
 })(typeof window == "undefined" ? global : window);
