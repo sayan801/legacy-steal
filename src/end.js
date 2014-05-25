@@ -13,6 +13,5 @@
 		global.steal = steal;
 		global.steal.addFormat = addFormat;
     }
-  	
   
 })(typeof window == "undefined" ? global : window);
