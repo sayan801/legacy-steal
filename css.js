@@ -1,5 +1,5 @@
 if( steal.config('env') === 'production' ) {
-	  t.fetch = function(load) {
+	  exports.fetch = function(load) {
 	    // return a thenable for fetching (as per specification)
 	    // alternatively return new Promise(function(resolve, reject) { ... })
 	    var cssFile = load.address;
