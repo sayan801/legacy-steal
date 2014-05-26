@@ -8,7 +8,7 @@ module("steal via system import");
 		var iframe = document.createElement('iframe');
 		window.removeMyself = function(){
 			delete window.removeMyself;
-			document.body.removeChild(iframe);
+			//document.body.removeChild(iframe);
 		};
 		document.body.appendChild(iframe);
 		iframe.contentWindow.document.open();
@@ -169,6 +169,8 @@ module("steal via html");
 			'src="../steal.js?../paths" data-config="../paths/config.js"'));
 	});
 	
-	
+	asyncTest("url paths in css work", function(){
+		makeIframe("css_paths/site.html");
+	});
 	
 })();

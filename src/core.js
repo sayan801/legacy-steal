@@ -37,4 +37,6 @@ var makeSteal = function(System){
 	};
 	
 	steal.System = System;
-	
+	steal.parseURI = parseURI;
+	steal.joinURIs = joinURIs;
+
