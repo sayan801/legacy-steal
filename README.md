@@ -29,60 +29,60 @@ Lets see how to get a basic app up and running.
 
 2. Create `stealconfig.js`:
 
-Add a `stealconfig.js` file directly within your "root" folder. Your
-"root" folder should contain all your static scripts and resources.
+  Add a `stealconfig.js` file directly within your "root" folder. Your
+  "root" folder should contain all your static scripts and resources.
+  
+  By default, steal will assume `stealconfig.js` is a sibling of `bower_components`:
 
-By default, steal will assume `stealconfig.js` is a sibling of `bower_components`:
-
-    ROOT/
-      bower.json
-      bower_components
-      stealconfig.js
+      ROOT/
+        bower.json
+        bower_components
+        stealconfig.js
     
-`stealconfig.js` will be loaded by every page in your project.  It is used to configure
-the location to modules and other behavior.    
+  `stealconfig.js` will be loaded by every page in your project.  It is used to configure
+  the location to modules and other behavior.    
     
 3. Add `main` module:
 
-Add a `main.js` to your project. This will load your apps other modules.
-
-    ROOT/
-      bower.json
-      bower_components
-      stealconfig.js
-      main.js
+  Add a `main.js` to your project. This will load your apps other modules.
+  
+      ROOT/
+        bower.json
+        bower_components
+        stealconfig.js
+        main.js
       
-Within `main.js` add:
-
-```js
-console.log("hello world");
-```
+  Within `main.js` add:
+  
+  ```js
+  console.log("hello world");
+  ```
  
 4. Create an HTML page:
 
-Create an `index.html` page that specifies the location of `stealconfig.js` and
-the `main` module name:
+  Create an `index.html` page that specifies the location of `stealconfig.js` and
+  the `main` module name:
+  
+      ROOT/
+        bower.json
+        bower_components
+        stealconfig.js
+        index.html
 
-    ROOT/
-      bower.json
-      bower_components
-      stealconfig.js
-      index.html
+  Within `index.html` add:
 
-Within `index.html` add:
-
-```html
-<!DOCTYPE html>
-<html>
-  <body>
-    <script src='./bower_components/steal/steal.js'
-            data-config='stealconfig.js'
-            data-main='main'></script>
-  </body>
-</html>
-```
-
-To build this app, read [StealTools](https://github.com/bitovi/steal-tools/tree/systemjs) docs.
+  ```html
+  <!DOCTYPE html>
+  <html>
+    <body>
+      <script src='./bower_components/steal/steal.js'
+              data-config='stealconfig.js'
+              data-main='main'></script>
+    </body>
+  </html>
+  ```
+  
+  To build this app, read [StealTools](https://github.com/bitovi/steal-tools/tree/systemjs) docs.
 
 
 ### Adding jQuery
@@ -105,13 +105,13 @@ To build this app, read [StealTools](https://github.com/bitovi/steal-tools/tree/
    ```
 
 3. Load jQuery.
-
-Import "jquery" with ES6 module syntax in `main.js`:
-
-```js
-import $ from "jquery";
-$(document.body).append("<h1>Hello World!</h1>");
-```
+  
+  Import "jquery" with ES6 module syntax in `main.js`:
+  
+  ```js
+  import $ from "jquery";
+  $(document.body).append("<h1>Hello World!</h1>");
+  ```
 
 
 ## Developing
@@ -119,21 +119,21 @@ $(document.body).append("<h1>Hello World!</h1>");
 After cloning ...
 
 1.  Install npm modules
-
+  
     > npm install
  
 2. Install bower modules
-
+  
     > bower install
     
 3. Setup grunt watch
-
+  
     > grunt watch
     
-This will automatically build when anything in `src` change.  
+  This will automatically build when anything in `src` change.  
+  
+  To test, open:
 
-To test, open:
-
-    test/test.html
-    
-And make sure everything passes.
+      test/test.html
+      
+  And make sure everything passes.
