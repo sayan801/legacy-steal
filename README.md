@@ -88,21 +88,21 @@ To build this app, read [StealTools](https://github.com/bitovi/steal-tools/tree/
 ### Adding jQuery
 
 1. Install jQuery:
-
-With [Bower](http://bower.io/)
-
-> bower install jquery -S
+   
+   With [Bower](http://bower.io/)
+   
+   > bower install jquery -S
 
 2. Configure jQuery's path and export:
 
-Add a `System.paths` config to `stealconfig.js` to tell steal where to find
-jQuery. Add a `System.meta` config to tell SystemJS that jQuery exports the "jQuery"
-variable.
-
-```js
-System.paths = {jquery: 'bower_components/jquery/dist/jquery.js'};
-System.meta = {jquery: { exports: "jQuery" } };
-```
+   Add a `System.paths` config to `stealconfig.js` to tell steal where to find
+   jQuery. Add a `System.meta` config to tell SystemJS that jQuery exports the "jQuery"
+   variable.
+   
+   ```js
+   System.paths = {jquery: 'bower_components/jquery/dist/jquery.js'};
+   System.meta = {jquery: { exports: "jQuery" } };
+   ```
 
 3. Load jQuery.
 
