@@ -15,7 +15,9 @@ number of script requests.
 
 StealJS supports IE8+ with AMD, CommonJS, and Steal syntax and IE9+ for ES6 syntax.
 
-## Hello World Example
+## Use
+
+### Hello World Example
 
 Lets see how to get a basic app up and running.
 
@@ -83,7 +85,7 @@ Within `index.html` add:
 To build this app, read [StealTools](https://github.com/bitovi/steal-tools/tree/systemjs) docs.
 
 
-## Adding jQuery
+### Adding jQuery
 
 1. Install jQuery:
 
@@ -110,3 +112,28 @@ Import "jquery" with ES6 module syntax in `main.js`:
 import $ from "jquery";
 $(document.body).append("<h1>Hello World!</h1>");
 ```
+
+
+## Developing
+
+After cloning ...
+
+1.  Install npm modules
+
+    > npm install
+ 
+2. Install bower modules
+
+    > bower install
+    
+3. Setup grunt watch
+
+    > grunt watch
+    
+This will automatically build when anything in `src` change.  
+
+To test, open:
+
+    test/test.html
+    
+And make sure everything passes.
