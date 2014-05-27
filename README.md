@@ -1,72 +1,20 @@
-@page stealjs StealJS
-@parent javascriptmvc 2
-@group stealjs.pages Pages
-
-StealJS is a collection of command line and JavaScript client utilities
-that make building, packaging, and sharing 
-JavaScript applications easy.  Lets see what it can do:
+StealJS is an ES6, AMD, CommonJS, and steal client-side loader. Combined with 
+[steal-tools](https://github.com/bitovi/steal-tools/tree/systemjs), its designed
+to simplify dependency management while being extremely powerful and flexible.
 
 
-### Dependency management ([steal])
+Steal builds from [SystemJS](https://github.com/systemjs/systemjs) and 
+[ES6ModuleLoader](https://github.com/ModuleLoader/es6-module-loader) and adds:
 
-[steal] loads modules into your app. Features:
+ - global configuration
+ - css and less support
+ - plugin extension mapping _(upcoming)_
+ - production builds with [steal-tools](https://github.com/bitovi/steal-tools/tree/systemjs)
 
- - Loads JS, CSS, Less, CoffeeScript, and client-side templates.
- - Parallel loading.
- - Works with scripts that don't use steal.
+But it's __killer__ feature - progressively loaded apps that balance caching and the 
+number of script requests.
 
-@codestart
-steal('widgets/tabs.js',
-      './style.css', 
-      function(Tabs){
-      
-  new Tabs("#item");
-});
-@codeend
-  
-### JS/CSS concatenation and minification ([steal.build])
+## Use
 
-[steal.build] combines and minfies an application (or application's) resources
-into a small number of minified packages for faster downloading. Features:
+> bower install stealjs -S
 
- - Minifies JS, Less, CoffeeScript, and client-side templates.
- - Build shared dependencies across [steal.build.apps multiple apps].
- - Package modules for [steal.build.packages progressive loading].
- - Create modules that work [steal.build.pluginify without steal].
-
-@codestart text
-js steal/buildjs mypage.html
-@codeend
-
-### Logging ([steal.dev])
-
-[steal.dev] logs messages cross browser.  Messages are removed in production builds.
-
-    steal.dev.log('something is happening');
-
-### Code generators ([steal.generate])
-
-[steal.generate]  makes building code generators extremely easy.  Features:
-
-  - Pre-packaged JMVC style code generators.
-  - Easily author custom generators.
-
-@codestart text
-js jquery/generate/app cookbook
-@codeend
-
-### Code cleaner ([steal.clean])
-
-[steal.clean] cleans your code and checks it against JSLint.
-
-@codestart text
-js steal/clean path/to/page.html
-@codeend
-
-### Searchable ajax apps ([steal.html])
-
-[steal.html] makes Google-crawlable html from your ajax app.
-
-@codestart text
-js steal/htmljs http://localhost/cookbook.html#recipes
-@codeend
