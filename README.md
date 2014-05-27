@@ -52,8 +52,10 @@ Add a `main.js` to your project. This will load your apps other modules.
       
 Within `main.js` add:
 
-    console.log("hello world");
-      
+```js
+console.log("hello world");
+```
+ 
 4. Create an HTML page:
 
 Create an `index.html` page that specifies the location of `stealconfig.js` and
@@ -67,14 +69,16 @@ the `main` module name:
 
 Within `index.html` add:
 
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <script src='./bower_components/steal/steal.js'
-                data-config='stealconfig.js'
-                data-main='main'></script>
-      </body>
-    </html>
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    <script src='./bower_components/steal/steal.js'
+            data-config='stealconfig.js'
+            data-main='main'></script>
+  </body>
+</html>
+```
 
 To build this app, read [StealTools](https://github.com/bitovi/steal-tools/tree/systemjs) docs.
 
@@ -93,14 +97,16 @@ Add a `System.paths` config to `stealconfig.js` to tell steal where to find
 jQuery. Add a `System.meta` config to tell SystemJS that jQuery exports the "jQuery"
 variable.
 
-    System.paths = {jquery: 'bower_components/jquery/dist/jquery.js'};
-    System.meta = {jquery: { exports: "jQuery" } };
-
+```js
+System.paths = {jquery: 'bower_components/jquery/dist/jquery.js'};
+System.meta = {jquery: { exports: "jQuery" } };
+```
 
 3. Load jQuery.
 
 Import "jquery" with ES6 module syntax in `main.js`:
 
-    import $ from "jquery";
-    $(document.body).append("<h1>Hello World!</h1>");
-    
+```js
+import $ from "jquery";
+$(document.body).append("<h1>Hello World!</h1>");
+```
