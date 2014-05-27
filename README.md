@@ -22,10 +22,10 @@ StealJS supports IE8+ with AMD, CommonJS, and Steal syntax and IE9+ for ES6 synt
 Lets see how to get a basic app up and running.
 
 1. Install StealJS:
+  
+  With [Bower](http://bower.io/)
 
-With [Bower](http://bower.io/)
-
-> bower install steal#0.1.1 -S
+  > bower install steal#0.1.1 -S
 
 2. Create `stealconfig.js`:
 
