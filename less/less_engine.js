@@ -3104,6 +3104,10 @@
 		location.protocol === 'chrome-extension:'  ||
 		location.protocol === 'resource:');
 
+	if (steal && steal.isRhino) {
+		less.env = 'production';
+	}
+
 	less.env = less.env || (location.hostname == '127.0.0.1' ||
 		location.hostname == '0.0.0.0'   ||
 		location.hostname == 'localhost' ||
